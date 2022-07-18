@@ -1,5 +1,5 @@
-import TodoList from './TodoList';
+import TodoList from './TodoList'
 
 export default {
   TodoList,
-};
+}
