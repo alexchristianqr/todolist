@@ -6,7 +6,7 @@
           <b-col cols="5" class="my-auto">
             <span class="h5">{{ $t('TodoList.card.header.title') }}</span>
           </b-col>
-          <b-col cols="7">
+          <b-col cols="7" class="my-auto">
             <div class="d-inline-flex float-right">
               <b-button variant="primary" @click="showModal(0)" class="d-flex">
                 <b-icon-plus class="mr-1" />
