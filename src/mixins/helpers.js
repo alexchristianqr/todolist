@@ -3,6 +3,19 @@ import dayjs from 'dayjs'
 
 Vue.mixin({
   methods: {
+    existsStorage(nameDB) {
+      return !!localStorage.getItem(`${nameDB}`)
+    },
+    setStorage(name, value) {
+      const bodyJson = JSON.stringify(value)
+      return localStorage.setItem(name, bodyJson)
+    },
+    getStorage(name) {
+      return JSON.parse(localStorage.getItem(name))
+    },
+    removeStorage(name) {
+      return localStorage.removeItem(name)
+    },
     /**
      * Validar estado del input en formulario
      * @param ref

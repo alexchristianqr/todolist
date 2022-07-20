@@ -17,7 +17,7 @@
         </b-row>
       </template>
       <!--          <pre>{{ tasks }}</pre>-->
-      <b-table ref="table" :items="tasks" :fields="fields" :sticky-header="true" show-empty empty-text="No hay tareas registradas" responsive hover striped bordered>
+      <b-table ref="table" :items="tasks" :fields="fields" show-empty empty-text="No hay tareas registradas" responsive hover striped bordered>
         <template #head(updatedAt)="row">
           <div class="text-truncate">{{ row.label }}</div>
         </template>
@@ -95,6 +95,7 @@ export default {
       ],
       modalParams: null,
       country: { country: { id: 'PE', name: 'Perú', code: 'pe', flag: 'per.svg' } },
+      sortBy: 'updatedAt',
     }
   },
   computed: {
@@ -113,12 +114,18 @@ export default {
       ]
     },
   },
+  async mounted() {
+    await this.getTasks()
+  },
   methods: {
+    async getTasks() {
+      await this.$store.dispatch('Task.getTasks', { self: this })
+    },
     // Completar tarea
     async checkedTask(row) {
       this.modalParams = row
       this.modalParams.updatedAt = new Date()
-      await this.$store.dispatch('Task.updateTask', { self: this })
+      await this.$store.dispatch('Task.updateTask', { self: this, noToast: true })
     },
     // Actualizar o crear tarea
     updateOrCreate() {
