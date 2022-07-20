@@ -4,8 +4,8 @@ import { store } from './store'
 
 // BootstrapVue
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap-vue/dist/bootstrap-vue.min.css'
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 
@@ -17,7 +17,7 @@ import messages from './locales'
 import VueI18n from 'vue-i18n'
 Vue.use(VueI18n)
 const i18n = new VueI18n({
-  locale: 'es',
+  locale: 'pe',
   messages,
 })
 

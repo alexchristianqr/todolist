@@ -9,11 +9,7 @@
                 <span class="h5">{{ $t('TodoList.card.header.title') }}</span>
               </b-col>
               <b-col cols="6" class="text-right">
-                <b-form-select v-model="selectedLocale" :options="optionsLocales" @change="changeLocale" class="w-25 mr-1">
-                  <template #first>
-                    <b-form-select-option :value="null" disabled>-- Please select an option --</b-form-select-option>
-                  </template>
-                </b-form-select>
+                <DropdownCountries :dropdown-params="country" class="mr-1" style="width: 150px" />
                 <b-button variant="primary" @click="showModal(0)">
                   <b-icon-plus class="mr-1" />
                   <span>{{ $t('TodoList.card.header.buttonCreate') }}</span>
@@ -63,12 +59,6 @@
               </b-dropdown>
             </template>
           </b-table>
-          <!--          <div>-->
-          <!--            <span>Sorting By: </span>-->
-          <!--            <b>{{ sortBy }}</b>-->
-          <!--            <span>, Sort Direction:</span>-->
-          <!--            <b>{{ sortDesc ? 'Descending' : 'Ascending' }}</b>-->
-          <!--          </div>-->
         </b-card>
       </b-form-group>
     </b-form>
@@ -79,9 +69,10 @@
 
 <script>
 import ModalUpdateOrCreate from '@/components/todolist/layouts/ModalUpdateOrCreate'
+import DropdownCountries from '@/components/common/DropdownCountries'
 export default {
   name: 'TodoList',
-  components: { ModalUpdateOrCreate },
+  components: { DropdownCountries, ModalUpdateOrCreate },
 
   data() {
     return {
@@ -101,12 +92,7 @@ export default {
         },
       ],
       modalParams: null,
-      selectedLocale: 'es',
-      optionsLocales: [
-        { value: 'en', text: 'English' },
-        { value: 'es', text: 'Español' },
-        { value: 'fr', text: 'Frances' },
-      ],
+      country: { country: { id: 'PE', name: 'Perú', code: 'pe', flag: 'per.svg' } },
       sortBy: 'status',
       sortDesc: false,
       selected: '',
@@ -128,27 +114,6 @@ export default {
     },
   },
   methods: {
-    onRowClicked(ctx) {
-      console.log({ ctx })
-      // const element = event.srcElement;
-      // const isFirstElement = !element.previousSibling;
-      // if (!isFirstElement) {
-      //   this.$router.push('/mythingy');
-      // }
-    },
-    reloadTable(ctx) {
-      console.log({ ctx })
-      this.$store.commit('refreshList')
-      // console.log({ctx})
-      // alert(123)
-      // ctx.sortBy = 'status' //Field key for sorting by (or null for no sorting)
-      // ctx.sortDesc = false // if sorting descending, false otherwise
-      // this.$refs.table.refresh()
-      // console.log(row)
-      // row.item.status = !row.item.status
-      // console.log({row})
-      // this.$emit('row-clicked', row)
-    },
     // Actualizar o crear tarea
     updateOrCreate() {
       if (this.modalParams.isPost) {
@@ -179,10 +144,6 @@ export default {
         await this.deleteTask(row)
       })
     },
-    // Cambiar idioma
-    changeLocale() {
-      this.$i18n.locale = this.selectedLocale
-    },
     // Mostrar modal
     showModal(index, values, isPost = true) {
       switch (index) {
@@ -195,7 +156,7 @@ export default {
               title: null,
               description: null,
               createdAt: new Date(),
-              expiredAt: null,
+              expiredAt: new Date(),
               status: false,
             }
           } else {

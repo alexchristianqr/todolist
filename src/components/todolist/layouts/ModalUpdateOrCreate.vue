@@ -14,18 +14,32 @@
     :cancel-disabled="loadingButton"
     :no-close-on-esc="loadingButton || modal.esc"
     :no-close-on-backdrop="loadingButton || modal.backdrop"
-    @ok="updateOrCreate"
+    @ok.prevent="okModal"
   >
     <!--    <pre>{{ modalParams }}</pre>-->
     <b-form ref="form">
+      <!--Alert Notification-->
+      <Alert :alert="alertNotification" />
+      <!---->
       <b-form-group :label="$t('ModalUpdateOrCreate.form.title')">
-        <b-form-input v-model="modalParams.title"></b-form-input>
+        <b-form-input v-model="modalParams.title" name="title" v-validate="{ required: true }" :state="validateState('title')"></b-form-input>
+        <b-form-invalid-feedback>{{ veeErrors.first('title') }}</b-form-invalid-feedback>
       </b-form-group>
       <b-form-group :label="$t('ModalUpdateOrCreate.form.description')">
-        <b-form-textarea v-model="modalParams.description"></b-form-textarea>
+        <b-form-textarea v-model="modalParams.description" name="description" v-validate="{ required: true }" :state="validateState('description')"></b-form-textarea>
+        <b-form-invalid-feedback>{{ veeErrors.first('description') }}</b-form-invalid-feedback>
       </b-form-group>
-      <b-form-group :label="$t('ModalUpdateOrCreate.form.expireDate')">
-        <b-form-datepicker v-model="modalParams.expiredAt"></b-form-datepicker>
+      <b-form-group :label="$t('ModalUpdateOrCreate.form.expiredAt')">
+        <b-form-datepicker v-model="modalParams.expiredAt" name="expiredAt" v-validate="{ required: true }" :state="validateState('expiredAt')"></b-form-datepicker>
+        <b-form-invalid-feedback>{{ veeErrors.first('expiredAt') }}</b-form-invalid-feedback>
+      </b-form-group>
+      <b-form-group v-if="!modalParams.isPost" :label="$t('ModalUpdateOrCreate.form.status')">
+        <b-form-select v-model="modalParams.status" name="status" v-validate="{ required: true }" :state="validateState('status')" :options="optionsStatuses" @change="changeLocale" class="w-50 mr-1">
+          <template #first>
+            <b-form-select-option :value="null" disabled>-- Please select an option --</b-form-select-option>
+          </template>
+        </b-form-select>
+        <b-form-invalid-feedback>{{ veeErrors.first('status') }}</b-form-invalid-feedback>
       </b-form-group>
     </b-form>
   </b-modal>
@@ -42,7 +56,12 @@ export default {
       type: Object,
     },
   },
-  data: () => ({}),
+  data: () => ({
+    optionsStatuses: [
+      { value: false, text: 'Pending' },
+      { value: true, text: 'Completed' },
+    ],
+  }),
   computed: {
     loadingButton() {
       return false
@@ -50,8 +69,26 @@ export default {
   },
   methods: {
     updateOrCreate() {
-      return this.$emit('eventUpdateOrCreate', this)
+      this.$emit('eventUpdateOrCreate', this)
+      this.modal.status = false // Cerrar modal
     },
+    // Ok modal
+    async okModal() {
+      // Check
+      const validation = await this.$validator.validateAll()
+      if (!validation) {
+        this.$store.commit('setError', 'Faltan completar algunos campos')
+        return
+      }
+
+      // Action submit
+      this.clearAlertNotification()
+      await this.updateOrCreate()
+    },
+  },
+  destroyed() {
+    this.clearAlertNotification()
+    this.setLoadingButton(false)
   },
 }
 </script>

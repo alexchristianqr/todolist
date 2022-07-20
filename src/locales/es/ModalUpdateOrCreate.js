@@ -2,7 +2,7 @@ export default {
   form: {
     title: 'Titulo',
     description: 'Descripción',
-    expireDate: 'Fecha expirado',
+    expiredAt: 'Fecha expirado',
     status: 'Estado',
   },
 }

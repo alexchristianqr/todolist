@@ -1,13 +1,15 @@
 const actions = {
   async 'Task.createTask'(context, { self }) {
-    return context.commit('addTask', self.modalParams)
+    context.commit('addTask', self.modalParams)
+    self.$toast.open(`Task created`)
   },
   async 'Task.updateTask'(context, { self }) {
-    return context.commit('updateTask', self.modalParams)
+    context.commit('updateTask', self.modalParams)
+    self.$toast.open(`Task updated`)
   },
   async 'Task.removeTask'(context, { self }) {
-    // console.log('jajaj',self.modalParams)
-    return context.commit('removeTask', self.modalParams)
+    context.commit('removeTask', self.modalParams)
+    self.$toast.default(`Task deleted`, {})
   },
 }
 

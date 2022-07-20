@@ -4,6 +4,17 @@ import dayjs from 'dayjs'
 Vue.mixin({
   methods: {
     /**
+     * Validar estado del input en formulario
+     * @param ref
+     * @returns {*}
+     */
+    validateState(ref) {
+      if (!this.$refs.form) return
+      if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
+        return !this.veeErrors.has(ref)
+      }
+    },
+    /**
      * Modal notificación para validar una acción
      * @param message
      * @param title
