@@ -34,7 +34,7 @@
         <b-form-invalid-feedback>{{ veeErrors.first('expiredAt') }}</b-form-invalid-feedback>
       </b-form-group>
       <b-form-group v-if="!modalParams.isPost" :label="$t('ModalUpdateOrCreate.form.status')">
-        <b-form-select v-model="modalParams.status" name="status" v-validate="{ required: true }" :state="validateState('status')" :options="optionsStatuses" @change="changeLocale" class="w-50 mr-1">
+        <b-form-select v-model="modalParams.status" name="status" v-validate="{ required: true }" :state="validateState('status')" :options="optionsStatuses" class="w-50 mr-1">
           <template #first>
             <b-form-select-option :value="null" disabled>-- Please select an option --</b-form-select-option>
           </template>

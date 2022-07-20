@@ -1,63 +1,66 @@
 <template>
   <div>
-    <b-form>
-      <b-form-group>
-        <b-card>
-          <template #header>
-            <b-row>
-              <b-col class="my-auto">
-                <span class="h5">{{ $t('TodoList.card.header.title') }}</span>
-              </b-col>
-              <b-col cols="6" class="text-right">
-                <DropdownCountries :dropdown-params="country" class="mr-1" style="width: 150px" />
-                <b-button variant="primary" @click="showModal(0)">
-                  <b-icon-plus class="mr-1" />
-                  <span>{{ $t('TodoList.card.header.buttonCreate') }}</span>
-                </b-button>
-              </b-col>
-            </b-row>
-          </template>
-          <!--          <pre>{{ tasks }}</pre>-->
-          <b-table ref="table" :items="tasks" :fields="fields" responsive bordered striped hover>
-            <template #cell(title)="row">
-              <b-form-checkbox v-model="row.item.status">
-                <template v-if="row.item.status">
-                  <del>{{ row.item.title }}</del>
-                </template>
-                <template v-else>
-                  <span>{{ row.item.title }}</span>
-                </template>
-              </b-form-checkbox>
+    <b-card>
+      <template #header>
+        <b-row>
+          <b-col cols="5" class="my-auto">
+            <span class="h5">{{ $t('TodoList.card.header.title') }}</span>
+          </b-col>
+          <b-col cols="7" class="">
+            <div class="d-inline-flex float-right">
+              <DropdownCountries :dropdown-params="country" class="mr-1" style="width: 150px" />
+              <b-button variant="primary" @click="showModal(0)" class="d-flex">
+                <b-icon-plus class="mr-1" />
+                <span class="text-truncate">{{ $t('TodoList.card.header.buttonCreate') }}</span>
+              </b-button>
+            </div>
+          </b-col>
+        </b-row>
+      </template>
+      <!--          <pre>{{ tasks }}</pre>-->
+      <b-table ref="table" :items="tasks" :fields="fields" responsive bordered striped hover>
+        <template #cell(title)="row">
+          <b-form-checkbox v-model="row.item.status">
+            <template v-if="row.item.status">
+              <del>{{ row.item.title }}</del>
             </template>
-            <template #cell(createdAt)="row">
-              <div>{{ formatDate(row.item.createdAt, 'DD/MM/YYYY HH:mm:ss') }}</div>
+            <template v-else>
+              <span>{{ row.item.title }}</span>
             </template>
-            <template #cell(expiredAt)="row">
-              <div>{{ formatDate(new Date(row.item.expiredAt), 'DD/MM/YYYY HH:mm:ss') }}</div>
+          </b-form-checkbox>
+        </template>
+        <template #cell(description)="row">
+          <div class="text-truncate" style="max-width: 400px">
+            {{ row.item.description }}
+          </div>
+        </template>
+        <template #cell(createdAt)="row">
+          <div>{{ formatDate(row.item.createdAt, 'DD/MM/YYYY HH:mm:ss') }}</div>
+        </template>
+        <template #cell(expiredAt)="row">
+          <div>{{ formatDate(new Date(row.item.expiredAt), 'DD/MM/YYYY HH:mm:ss') }}</div>
+        </template>
+        <template #cell(status)="row">
+          <b-badge v-if="row.item.status" variant="success">{{ $t('TodoList.card.body.table.labelCompleted') }}</b-badge>
+          <b-badge v-else variant="warning">{{ $t('TodoList.card.body.table.labelPending') }}</b-badge>
+        </template>
+        <template #cell(actions)="row">
+          <b-dropdown variant="light" toggle-class="text-decoration-none" no-caret :disabled="row.item.status">
+            <template #button-content>
+              <b-icon-three-dots></b-icon-three-dots>
             </template>
-            <template #cell(status)="row">
-              <b-badge v-if="row.item.status" variant="success">{{ $t('TodoList.card.body.table.labelCompleted') }}</b-badge>
-              <b-badge v-else variant="warning">{{ $t('TodoList.card.body.table.labelPending') }}</b-badge>
-            </template>
-            <template #cell(actions)="row">
-              <b-dropdown variant="light" toggle-class="text-decoration-none" no-caret :disabled="row.item.status">
-                <template #button-content>
-                  <b-icon-three-dots></b-icon-three-dots>
-                </template>
-                <b-dropdown-item href="#" @click="showModal(0, row.item, false)">
-                  <b-icon-pencil class="mr-1"></b-icon-pencil>
-                  <span>{{ $t('TodoList.card.body.table.actions.buttonUpdate') }}</span>
-                </b-dropdown-item>
-                <b-dropdown-item href="#" @click="notifyDeleteTask(row.item)">
-                  <b-icon-trash class="mr-1"></b-icon-trash>
-                  <span>{{ $t('TodoList.card.body.table.actions.buttonDelete') }}</span>
-                </b-dropdown-item>
-              </b-dropdown>
-            </template>
-          </b-table>
-        </b-card>
-      </b-form-group>
-    </b-form>
+            <b-dropdown-item href="#" @click="showModal(0, row.item, false)">
+              <b-icon-pencil class="mr-1"></b-icon-pencil>
+              <span>{{ $t('TodoList.card.body.table.actions.buttonUpdate') }}</span>
+            </b-dropdown-item>
+            <b-dropdown-item href="#" @click="notifyDeleteTask(row.item)">
+              <b-icon-trash class="mr-1"></b-icon-trash>
+              <span>{{ $t('TodoList.card.body.table.actions.buttonDelete') }}</span>
+            </b-dropdown-item>
+          </b-dropdown>
+        </template>
+      </b-table>
+    </b-card>
     <!-- The modal -->
     <ModalUpdateOrCreate v-if="modal[0].status" :modal="modal[0]" :modalParams="modalParams" @eventUpdateOrCreate="updateOrCreate" />
   </div>
@@ -96,11 +99,11 @@ export default {
     },
     fields() {
       return [
-        { key: 'title', label: this.$t('TodoList.card.body.table.fields.title'), sortable: true, tdClass: 'align-middle' },
-        { key: 'description', label: this.$t('TodoList.card.body.table.fields.description'), sortable: true, tdClass: 'align-middle' },
-        { key: 'createdAt', label: this.$t('TodoList.card.body.table.fields.createdAt'), sortable: true, tdClass: 'align-middle' },
-        { key: 'expiredAt', label: this.$t('TodoList.card.body.table.fields.expiredAt'), sortable: true, tdClass: 'align-middle' },
-        { key: 'status', label: this.$t('TodoList.card.body.table.fields.status'), sortable: true, tdClass: 'align-middle' },
+        { key: 'title', label: this.$t('TodoList.card.body.table.fields.title'), sortable: true, tdClass: 'align-middle text-truncate' },
+        { key: 'description', label: this.$t('TodoList.card.body.table.fields.description'), sortable: true, tdClass: 'align-middle w-75' },
+        { key: 'createdAt', label: this.$t('TodoList.card.body.table.fields.createdAt'), sortable: true, tdClass: 'align-middle text-truncate' },
+        { key: 'expiredAt', label: this.$t('TodoList.card.body.table.fields.expiredAt'), sortable: true, tdClass: 'align-middle text-truncate' },
+        { key: 'status', label: this.$t('TodoList.card.body.table.fields.status'), sortable: true, tdClass: 'align-middle text-truncate' },
         { key: 'actions', label: this.$t('TodoList.card.body.table.fields.actions'), sortable: false, tdClass: 'align-middle' },
       ]
     },

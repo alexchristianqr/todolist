@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="container py-lg-3">
+  <div class="container overflow-hidden">
     <div class="py-3">
       <h1>App TodoList</h1>
     </div>
