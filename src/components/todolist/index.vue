@@ -17,7 +17,7 @@
         </b-row>
       </template>
       <!--          <pre>{{ tasks }}</pre>-->
-      <b-table ref="table" :items="tasks" :fields="fields" responsive bordered striped hover>
+      <b-table ref="table" :items="tasks" :fields="fields" show-empty empty-text="No hay tareas registradas" responsive hover striped>
         <template #cell(title)="row">
           <b-form-checkbox v-model="row.item.status">
             <template v-if="row.item.status">
