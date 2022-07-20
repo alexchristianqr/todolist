@@ -25,4 +25,9 @@ export default {
       },
     },
   },
+  footer: {
+    a: 'Made with',
+    b: 'by',
+    c: 'with love',
+  },
 }

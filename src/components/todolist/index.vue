@@ -6,9 +6,8 @@
           <b-col cols="5" class="my-auto">
             <span class="h5">{{ $t('TodoList.card.header.title') }}</span>
           </b-col>
-          <b-col cols="7" class="">
+          <b-col cols="7">
             <div class="d-inline-flex float-right">
-              <DropdownCountries :dropdown-params="country" class="mr-1" style="width: 150px" />
               <b-button variant="primary" @click="showModal(0)" class="d-flex">
                 <b-icon-plus class="mr-1" />
                 <span class="text-truncate">{{ $t('TodoList.card.header.buttonCreate') }}</span>
@@ -68,10 +67,9 @@
 
 <script>
 import ModalUpdateOrCreate from '@/components/todolist/layouts/ModalUpdateOrCreate'
-import DropdownCountries from '@/components/common/DropdownCountries'
 export default {
   name: 'TodoList',
-  components: { DropdownCountries, ModalUpdateOrCreate },
+  components: { ModalUpdateOrCreate },
   data() {
     return {
       modal: [

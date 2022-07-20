@@ -25,4 +25,9 @@ export default {
       },
     },
   },
+  footer: {
+    a: 'Hecho con',
+    b: 'por',
+    c: 'con amor',
+  },
 }

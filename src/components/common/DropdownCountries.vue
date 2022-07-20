@@ -1,15 +1,15 @@
 <template>
-  <b-dropdown variant="light" menu-class="dropdown-menu-custom" :disabled="dropdpownDisabled">
+  <b-dropdown variant="light" :dropleft="true" :disabled="dropdpownDisabled">
     <template #button-content>
-      <div class="w-100 text-left">
+      <div class="w-100 d-inline-flex my-auto">
         <template v-if="selected">
-          <div class="float-left d-flex">
-            <img :src="require(`../../assets/images/svg/countries/${selected.flag}`)" width="32" class="mr-2" />
-            <div>{{ `${selected.id}(${selected.code})` }}</div>
+          <div class="ml-1">
+            <img :src="require(`../../assets/images/svg/countries/${selected.flag}`)" width="32" class="mr-1" />
+            <!--            <div>{{ `${selected.id}(${selected.code})` }}</div>-->
           </div>
-          <div class="float-right">
-            <i class="cis-caret-bottom"></i>
-          </div>
+          <!--          <div class="float-right">-->
+          <!--            <i class="cis-caret-bottom"></i>-->
+          <!--          </div>-->
         </template>
         <template v-else>
           <div class="float-left d-flex">
