@@ -13,8 +13,9 @@ export default {
         fields: {
           title: 'Title',
           description: 'Description',
-          createdAt: 'Created date',
           expiredAt: 'Expire date',
+          updatedAt: 'Updated date',
+          createdAt: 'Created date',
           status: 'Status',
           actions: 'Actions',
         },

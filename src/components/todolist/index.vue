@@ -17,9 +17,12 @@
         </b-row>
       </template>
       <!--          <pre>{{ tasks }}</pre>-->
-      <b-table ref="table" :items="tasks" :fields="fields" show-empty empty-text="No hay tareas registradas" responsive hover striped>
+      <b-table ref="table" :items="tasks" :fields="fields" :sticky-header="true" show-empty empty-text="No hay tareas registradas" responsive hover striped bordered>
+        <template #head(updatedAt)="row">
+          <div class="text-truncate">{{ row.label }}</div>
+        </template>
         <template #cell(title)="row">
-          <b-form-checkbox v-model="row.item.status">
+          <b-form-checkbox v-model="row.item.status" @input="checkedTask(row.item)">
             <template v-if="row.item.status">
               <del>{{ row.item.title }}</del>
             </template>
@@ -33,11 +36,14 @@
             {{ row.item.description }}
           </div>
         </template>
-        <template #cell(createdAt)="row">
-          <div>{{ formatDate(row.item.createdAt, 'DD/MM/YYYY HH:mm:ss') }}</div>
-        </template>
         <template #cell(expiredAt)="row">
           <div>{{ formatDate(new Date(row.item.expiredAt), 'DD/MM/YYYY HH:mm:ss') }}</div>
+        </template>
+        <template #cell(updatedAt)="row">
+          <div>{{ formatDate(row.item.updatedAt, 'DD/MM/YYYY HH:mm:ss') }}</div>
+        </template>
+        <template #cell(createdAt)="row">
+          <div>{{ formatDate(row.item.createdAt, 'DD/MM/YYYY HH:mm:ss') }}</div>
         </template>
         <template #cell(status)="row">
           <b-badge v-if="row.item.status" variant="success">{{ $t('TodoList.card.body.table.labelCompleted') }}</b-badge>
@@ -97,16 +103,23 @@ export default {
     },
     fields() {
       return [
-        { key: 'title', label: this.$t('TodoList.card.body.table.fields.title'), sortable: true, tdClass: 'align-middle text-truncate' },
-        { key: 'description', label: this.$t('TodoList.card.body.table.fields.description'), sortable: true, tdClass: 'align-middle w-75' },
-        { key: 'createdAt', label: this.$t('TodoList.card.body.table.fields.createdAt'), sortable: true, tdClass: 'align-middle text-truncate' },
+        { key: 'title', label: this.$t('TodoList.card.body.table.fields.title'), sortable: false, tdClass: 'align-middle text-truncate', stickyColumn: true },
+        { key: 'description', label: this.$t('TodoList.card.body.table.fields.description'), sortable: false, tdClass: 'align-middle w-50' },
         { key: 'expiredAt', label: this.$t('TodoList.card.body.table.fields.expiredAt'), sortable: true, tdClass: 'align-middle text-truncate' },
+        { key: 'updatedAt', label: this.$t('TodoList.card.body.table.fields.updatedAt'), sortable: true, tdClass: 'align-middle text-truncate' },
+        { key: 'createdAt', label: this.$t('TodoList.card.body.table.fields.createdAt'), sortable: true, tdClass: 'align-middle text-truncate' },
         { key: 'status', label: this.$t('TodoList.card.body.table.fields.status'), sortable: true, tdClass: 'align-middle text-truncate' },
         { key: 'actions', label: this.$t('TodoList.card.body.table.fields.actions'), sortable: false, tdClass: 'align-middle' },
       ]
     },
   },
   methods: {
+    // Completar tarea
+    async checkedTask(row) {
+      this.modalParams = row
+      this.modalParams.updatedAt = new Date()
+      await this.$store.dispatch('Task.updateTask', { self: this })
+    },
     // Actualizar o crear tarea
     updateOrCreate() {
       if (this.modalParams.isPost) {
@@ -121,14 +134,18 @@ export default {
       this.modalParams.id = lengthTasks + 1
       await this.$store.dispatch('Task.createTask', { self: this })
     },
+    // Actualizar tarea
     async updateTask() {
+      this.modalParams.updatedAt = new Date()
       await this.$store.dispatch('Task.updateTask', { self: this })
     },
     // Eliminar tarea
     async deleteTask(row) {
       this.modalParams = row
+      this.modalParams.updatedAt = new Date()
       await this.$store.dispatch('Task.removeTask', { self: this })
     },
+    // Alerta modal notificación
     notifyDeleteTask(row) {
       this.messageBoxConfirm({
         message: this.$t('TodoList.card.body.table.labelNotifyDeleteTask'),
@@ -148,8 +165,9 @@ export default {
               id: null,
               title: null,
               description: null,
-              createdAt: new Date(),
               expiredAt: new Date(),
+              updatedAt: new Date(),
+              createdAt: new Date(),
               status: false,
             }
           } else {

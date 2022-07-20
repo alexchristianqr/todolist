@@ -13,8 +13,9 @@ export default {
         fields: {
           title: 'Titulo',
           description: 'Descripción',
-          createdAt: 'Fecha creado',
           expiredAt: 'Fecha expirado',
+          updatedAt: 'Fecha actualizado',
+          createdAt: 'Fecha creado',
           status: 'Estado',
           actions: 'Acciones',
         },
