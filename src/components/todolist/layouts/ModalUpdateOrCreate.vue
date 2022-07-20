@@ -16,7 +16,7 @@
     :no-close-on-backdrop="loadingButton || modal.backdrop"
     @ok="updateOrCreate"
   >
-    <pre>{{ modalParams }}</pre>
+    <!--    <pre>{{ modalParams }}</pre>-->
     <b-form ref="form">
       <b-form-group :label="$t('ModalUpdateOrCreate.form.title')">
         <b-form-input v-model="modalParams.title"></b-form-input>

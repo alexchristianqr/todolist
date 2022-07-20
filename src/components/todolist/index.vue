@@ -14,10 +14,6 @@
                     <b-form-select-option :value="null" disabled>-- Please select an option --</b-form-select-option>
                   </template>
                 </b-form-select>
-                <b-button variant="secondary" class="mr-1">
-                  <b-icon-gear-fill class="mr-1" />
-                  <span>{{ $t('TodoList.card.header.buttonSettings') }}</span>
-                </b-button>
                 <b-button variant="primary" @click="showModal(0)">
                   <b-icon-plus class="mr-1" />
                   <span>{{ $t('TodoList.card.header.buttonCreate') }}</span>
@@ -25,7 +21,18 @@
               </b-col>
             </b-row>
           </template>
-          <b-table :items="tasks" :fields="fields" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" responsive bordered striped hover>
+          <!--          <pre>{{ tasks }}</pre>-->
+          <b-table ref="table" :items="tasks" :fields="fields" responsive bordered striped hover>
+            <template #cell(title)="row">
+              <b-form-checkbox v-model="row.item.status">
+                <template v-if="row.item.status">
+                  <del>{{ row.item.title }}</del>
+                </template>
+                <template v-else>
+                  <span>{{ row.item.title }}</span>
+                </template>
+              </b-form-checkbox>
+            </template>
             <template #cell(createdAt)="row">
               <div>{{ formatDate(row.item.createdAt, 'DD/MM/YYYY HH:mm:ss') }}</div>
             </template>
@@ -41,7 +48,7 @@
               </template>
             </template>
             <template #cell(actions)="row">
-              <b-dropdown variant="light" toggle-class="text-decoration-none" no-caret>
+              <b-dropdown variant="light" toggle-class="text-decoration-none" no-caret :disabled="row.item.status">
                 <template #button-content>
                   <b-icon-three-dots></b-icon-three-dots>
                 </template>
@@ -49,19 +56,19 @@
                   <b-icon-pencil class="mr-1"></b-icon-pencil>
                   <span>{{ $t('TodoList.card.body.table.actions.buttonUpdate') }}</span>
                 </b-dropdown-item>
-                <b-dropdown-item href="#" @click="deleteTask">
+                <b-dropdown-item href="#" @click="notifyDeleteTask(row.item)">
                   <b-icon-trash class="mr-1"></b-icon-trash>
                   <span>{{ $t('TodoList.card.body.table.actions.buttonDelete') }}</span>
                 </b-dropdown-item>
               </b-dropdown>
             </template>
           </b-table>
-          <div>
-            <span>Sorting By: </span>
-            <b>{{ sortBy }}</b>
-            <span>, Sort Direction:</span>
-            <b>{{ sortDesc ? 'Descending' : 'Ascending' }}</b>
-          </div>
+          <!--          <div>-->
+          <!--            <span>Sorting By: </span>-->
+          <!--            <b>{{ sortBy }}</b>-->
+          <!--            <span>, Sort Direction:</span>-->
+          <!--            <b>{{ sortDesc ? 'Descending' : 'Ascending' }}</b>-->
+          <!--          </div>-->
         </b-card>
       </b-form-group>
     </b-form>
@@ -100,24 +107,48 @@ export default {
         { value: 'es', text: 'Español' },
         { value: 'fr', text: 'Frances' },
       ],
-      sortBy: 'age',
+      sortBy: 'status',
       sortDesc: false,
-      fields: [
-        { key: 'title', label: 'Title', sortable: true, tdClass: 'align-middle' },
-        { key: 'description', label: 'Description', sortable: true, tdClass: 'align-middle' },
-        { key: 'createdAt', label: 'Create Date', sortable: true, tdClass: 'align-middle' },
-        { key: 'expiredAt', label: 'Expire Date', sortable: true, tdClass: 'align-middle' },
-        { key: 'status', label: 'Status', sortable: true, tdClass: 'align-middle' },
-        { key: 'actions', label: 'Actions', sortable: false, tdClass: 'align-middle' },
-      ],
+      selected: '',
     }
   },
   computed: {
     tasks() {
       return this.$store.getters.tasks
     },
+    fields() {
+      return [
+        { key: 'title', label: this.$t('TodoList.card.body.table.fields.title'), sortable: true, tdClass: 'align-middle' },
+        { key: 'description', label: this.$t('TodoList.card.body.table.fields.description'), sortable: true, tdClass: 'align-middle' },
+        { key: 'createdAt', label: this.$t('TodoList.card.body.table.fields.createdAt'), sortable: true, tdClass: 'align-middle' },
+        { key: 'expiredAt', label: this.$t('TodoList.card.body.table.fields.expiredAt'), sortable: true, tdClass: 'align-middle' },
+        { key: 'status', label: this.$t('TodoList.card.body.table.fields.status'), sortable: true, tdClass: 'align-middle' },
+        { key: 'actions', label: this.$t('TodoList.card.body.table.fields.actions'), sortable: false, tdClass: 'align-middle' },
+      ]
+    },
   },
   methods: {
+    onRowClicked(ctx) {
+      console.log({ ctx })
+      // const element = event.srcElement;
+      // const isFirstElement = !element.previousSibling;
+      // if (!isFirstElement) {
+      //   this.$router.push('/mythingy');
+      // }
+    },
+    reloadTable(ctx) {
+      console.log({ ctx })
+      this.$store.commit('refreshList')
+      // console.log({ctx})
+      // alert(123)
+      // ctx.sortBy = 'status' //Field key for sorting by (or null for no sorting)
+      // ctx.sortDesc = false // if sorting descending, false otherwise
+      // this.$refs.table.refresh()
+      // console.log(row)
+      // row.item.status = !row.item.status
+      // console.log({row})
+      // this.$emit('row-clicked', row)
+    },
     // Actualizar o crear tarea
     updateOrCreate() {
       if (this.modalParams.isPost) {
@@ -128,15 +159,24 @@ export default {
     },
     // Crear tarea
     async createTask() {
+      const lengthTasks = this.tasks.length
+      this.modalParams.id = lengthTasks + 1
       await this.$store.dispatch('Task.createTask', { self: this })
     },
     async updateTask() {
-      await this.$store.dispatch('Task.createTask', { self: this })
+      await this.$store.dispatch('Task.updateTask', { self: this })
     },
     // Eliminar tarea
-    deleteTask() {
+    async deleteTask(row) {
+      this.modalParams = row
+      await this.$store.dispatch('Task.removeTask', { self: this })
+    },
+    notifyDeleteTask(row) {
       this.messageBoxConfirm({
-        message: `¿Esta seguro de eliminar el item?`,
+        message: this.$t('TodoList.card.body.table.labelNotifyDeleteTask'),
+      }).then(async (value) => {
+        if (!value) return
+        await this.deleteTask(row)
       })
     },
     // Cambiar idioma
@@ -151,6 +191,7 @@ export default {
             this.modal[index].title = 'Crear Tarea'
             this.modal[index].oktitle = 'Guardar'
             this.modalParams = {
+              id: null,
               title: null,
               description: null,
               createdAt: new Date(),

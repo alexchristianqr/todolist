@@ -1,27 +1,14 @@
 const state = {
   paginate: {
     data: [
-      // {
-      //   title: 'Titulo 1',
-      //   description: 'Descripcion',
-      //   createdAt: 'Fecha creado',
-      //   expiredAt: 'Fecha expirado',
-      //   isActive: true,
-      // },
-      // {
-      //   title: 'Titulo 2',
-      //   description: 'Descripcion',
-      //   createdAt: 'Fecha creado',
-      //   expiredAt: 'Fecha expirado',
-      //   isActive: true,
-      // },
-      // {
-      //   title: 'Titulo 3',
-      //   description: 'Descripcion',
-      //   createdAt: 'Fecha creado',
-      //   expiredAt: 'Fecha expirado',
-      //   isActive: true,
-      // },
+      {
+        id: 1,
+        title: 'Tarea #1',
+        description: 'Ejemplo descriptivo de mi tarea #1',
+        createdAt: '2022-01-01 18:00:00',
+        expiredAt: '2099-01-01 23:59:00',
+        status: false,
+      },
     ],
     from: null,
     perPage: null,

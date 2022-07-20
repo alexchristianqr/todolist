@@ -7,6 +7,15 @@ export default {
     },
     body: {
       table: {
+        labelNotifyDeleteTask: '¿Está seguro de eliminar el item?',
+        fields: {
+          title: 'Titulo',
+          description: 'Descripción',
+          createdAt: 'Fecha creado',
+          expiredAt: 'Fecha expirado',
+          status: 'Estado',
+          actions: 'Acciones',
+        },
         actions: {
           buttonUpdate: 'Editar',
           buttonDelete: 'Eliminar',

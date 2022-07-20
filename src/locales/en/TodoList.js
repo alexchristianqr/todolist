@@ -7,6 +7,15 @@ export default {
     },
     body: {
       table: {
+        labelNotifyDeleteTask: 'Are you sure you want to delete the article?',
+        fields: {
+          title: 'Title',
+          description: 'Description',
+          createdAt: 'Created date',
+          expiredAt: 'Expire date',
+          status: 'Status',
+          actions: 'Actions',
+        },
         actions: {
           buttonUpdate: 'Edit',
           buttonDelete: 'Remove',
