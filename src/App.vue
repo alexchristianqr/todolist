@@ -1,5 +1,5 @@
 <template>
-  <div class="container overflow-hidden">
+  <div class="container-lg overflow-hidden">
     <div class="py-3">
       <b-row>
         <b-col lg="10" md="10" cols="9" class="my-auto">
