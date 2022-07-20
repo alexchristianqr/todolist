@@ -69,7 +69,6 @@ import DropdownCountries from '@/components/common/DropdownCountries'
 export default {
   name: 'TodoList',
   components: { DropdownCountries, ModalUpdateOrCreate },
-
   data() {
     return {
       modal: [
@@ -89,9 +88,6 @@ export default {
       ],
       modalParams: null,
       country: { country: { id: 'PE', name: 'Perú', code: 'pe', flag: 'per.svg' } },
-      sortBy: 'status',
-      sortDesc: false,
-      selected: '',
     }
   },
   computed: {
@@ -141,7 +137,7 @@ export default {
       })
     },
     // Mostrar modal
-    showModal(index, values, isPost = true) {
+    showModal(index, values = null, isPost = true) {
       switch (index) {
         case 0:
           if (isPost) {

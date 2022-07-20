@@ -21,7 +21,6 @@ export default {
 }
 </script>
 
-<style lang="scss">
-// Styles vue toast
-@import '~vue-toast-notification/dist/theme-default.css';
+<style>
+@import '../node_modules/vue-toast-notification/dist/theme-default.css';
 </style>
