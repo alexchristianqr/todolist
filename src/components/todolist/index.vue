@@ -36,12 +36,8 @@
               <div>{{ formatDate(new Date(row.item.expiredAt), 'DD/MM/YYYY HH:mm:ss') }}</div>
             </template>
             <template #cell(status)="row">
-              <template v-if="row.item.status">
-                <b-badge variant="success">Completed</b-badge>
-              </template>
-              <template v-else>
-                <b-badge variant="warning">Pending</b-badge>
-              </template>
+              <b-badge v-if="row.item.status" variant="success">{{ $t('TodoList.card.body.table.labelCompleted') }}</b-badge>
+              <b-badge v-else variant="warning">{{ $t('TodoList.card.body.table.labelPending') }}</b-badge>
             </template>
             <template #cell(actions)="row">
               <b-dropdown variant="light" toggle-class="text-decoration-none" no-caret :disabled="row.item.status">

@@ -56,15 +56,12 @@ export default {
       type: Object,
     },
   },
-  data: () => ({
-    optionsStatuses: [
-      { value: false, text: 'Pending' },
-      { value: true, text: 'Completed' },
-    ],
-  }),
   computed: {
-    loadingButton() {
-      return false
+    optionsStatuses() {
+      return [
+        { value: false, text: this.$t('TodoList.card.body.table.labelPending') },
+        { value: true, text: this.$t('TodoList.card.body.table.labelCompleted') },
+      ]
     },
   },
   methods: {

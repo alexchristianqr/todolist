@@ -7,6 +7,8 @@ export default {
     },
     body: {
       table: {
+        labelPending: 'Pendiente',
+        labelCompleted: 'Completado',
         labelNotifyDeleteTask: '¿Está seguro de eliminar el item?',
         fields: {
           title: 'Titulo',

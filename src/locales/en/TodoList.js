@@ -7,6 +7,8 @@ export default {
     },
     body: {
       table: {
+        labelPending: 'Pending',
+        labelCompleted: 'Completed',
         labelNotifyDeleteTask: 'Are you sure you want to delete the article?',
         fields: {
           title: 'Title',
