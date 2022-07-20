@@ -4,7 +4,7 @@
       <h1>App TodoList</h1>
     </div>
     <TodoList />
-    <MyFooter/>
+    <MyFooter />
   </div>
 </template>
 
