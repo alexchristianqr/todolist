@@ -2,10 +2,10 @@
   <div class="container-lg overflow-hidden">
     <div class="py-3">
       <b-row>
-        <b-col lg="10" md="10" cols="9" class="my-auto">
+        <b-col lg="10" md="10" cols="8" class="my-auto">
           <h1><span class="d-none d-md-inline">App </span>TodoList</h1>
         </b-col>
-        <b-col lg="2" md="2" cols="3" class="my-auto text-right">
+        <b-col lg="2" md="2" cols="4" class="my-auto text-right">
           <DropdownCountries :dropdown-params="country" class="mr-1" />
         </b-col>
       </b-row>
