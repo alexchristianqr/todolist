@@ -1,24 +1,25 @@
-# todolist
+# Project: todolist
 
-## Project setup
-```
-npm install
-```
+## Automatic tag
 
-### Compiles and hot-reloads for development
-```
-npm run serve
+```bash
+git tag # Listar ascendente
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
+```bash
+git tag --sort=-v:refname # Listar descendiente
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+```bash
+sh ghpages.sh o.1.26 # Ejecutar shell script
+```
+
+## Manually tag
+
+```bash
+git tag -a 1.0.X -m "version 1.0.X" # Comentar version tag
+```
+
+```bash
+git push -f git@github.com:alexchristianqr/portfolio.git master:gh-pages # Link repositorio github
+```
