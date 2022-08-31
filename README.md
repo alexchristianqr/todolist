@@ -3,15 +3,11 @@
 ## Automatic tag
 
 ```bash
-git tag # Listar ascendente
-```
-
-```bash
 git tag --sort=-v:refname # Listar descendiente
 ```
 
 ```bash
-sh ghpages.sh o.1.26 # Ejecutar shell script
+sh ghpages.sh 0.1.26 # Ejecutar shell script
 ```
 
 ## Manually tag
