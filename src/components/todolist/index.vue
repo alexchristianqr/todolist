@@ -17,7 +17,7 @@
         </b-row>
       </template>
       <!--          <pre>{{ tasks }}</pre>-->
-      <b-table ref="table" :items="tasks" :fields="fields" show-empty empty-text="No hay tareas registradas" responsive hover striped bordered>
+      <b-table ref="table" :items="items" :fields="fields" :per-page="perPage" :current-page="currentPage" show-empty empty-text="No hay tareas registradas" responsive hover striped bordered>
         <template #head(updatedAt)="row">
           <div class="text-truncate">{{ row.label }}</div>
         </template>
@@ -65,6 +65,7 @@
           </b-dropdown>
         </template>
       </b-table>
+      <b-pagination v-model="currentPage" :total-rows="rows" :per-page="perPage" aria-controls="my-table"></b-pagination>
     </b-card>
     <!-- The modal -->
     <ModalUpdateOrCreate v-if="modal[0].status" :modal="modal[0]" :modalParams="modalParams" @eventUpdateOrCreate="updateOrCreate" />
@@ -76,42 +77,81 @@ import ModalUpdateOrCreate from '@/components/todolist/layouts/ModalUpdateOrCrea
 export default {
   name: 'TodoList',
   components: { ModalUpdateOrCreate },
-  data() {
-    return {
-      modal: [
-        {
-          status: false,
-          title: 'Nueva Tareas',
-          oktitle: 'Aceptar',
-          canceltitle: 'Cancelar',
-          size: 'md',
-          bodyclass: null,
-          footerclass: 'justify-content-center',
-          centered: false,
-          hidefooter: false,
-          esc: true,
-          backdrop: true,
-        },
-      ],
-      modalParams: null,
-      country: { country: { id: 'ES', name: 'España', code: 'es', flag: 'esp.svg' } },
-      sortBy: 'updatedAt',
-    }
-  },
+  data: () => ({
+    perPage: 5,
+    currentPage: 1,
+    modal: [
+      {
+        status: false,
+        title: 'Nueva Tareas',
+        oktitle: 'Aceptar',
+        canceltitle: 'Cancelar',
+        size: 'md',
+        bodyclass: null,
+        footerclass: 'justify-content-center',
+        centered: false,
+        hidefooter: false,
+        esc: true,
+        backdrop: true,
+      },
+    ],
+    modalParams: null,
+    country: { country: { id: 'ES', name: 'España', code: 'es', flag: 'esp.svg' } },
+    sortBy: 'updatedAt',
+  }),
   computed: {
-    tasks() {
+    items() {
       return this.$store.getters.tasks
     },
     fields() {
       return [
-        { key: 'title', label: this.$t('TodoList.card.body.table.fields.title'), sortable: false, tdClass: 'align-middle text-truncate', stickyColumn: true },
-        { key: 'description', label: this.$t('TodoList.card.body.table.fields.description'), sortable: false, tdClass: 'align-middle w-50' },
-        { key: 'expiredAt', label: this.$t('TodoList.card.body.table.fields.expiredAt'), sortable: true, tdClass: 'align-middle text-truncate' },
-        { key: 'updatedAt', label: this.$t('TodoList.card.body.table.fields.updatedAt'), sortable: true, tdClass: 'align-middle text-truncate' },
-        { key: 'createdAt', label: this.$t('TodoList.card.body.table.fields.createdAt'), sortable: true, tdClass: 'align-middle text-truncate' },
-        { key: 'status', label: this.$t('TodoList.card.body.table.fields.status'), sortable: true, tdClass: 'align-middle text-truncate' },
-        { key: 'actions', label: this.$t('TodoList.card.body.table.fields.actions'), sortable: false, tdClass: 'align-middle' },
+        {
+          key: 'title',
+          label: this.$t('TodoList.card.body.table.fields.title'),
+          sortable: false,
+          tdClass: 'align-middle text-truncate',
+          stickyColumn: true,
+        },
+        {
+          key: 'description',
+          label: this.$t('TodoList.card.body.table.fields.description'),
+          sortable: false,
+          tdClass: 'align-middle w-50',
+        },
+        {
+          key: 'expiredAt',
+          label: this.$t('TodoList.card.body.table.fields.expiredAt'),
+          sortable: true,
+          tdClass: 'align-middle text-truncate',
+        },
+        {
+          key: 'updatedAt',
+          label: this.$t('TodoList.card.body.table.fields.updatedAt'),
+          sortable: true,
+          tdClass: 'align-middle text-truncate',
+        },
+        {
+          key: 'createdAt',
+          label: this.$t('TodoList.card.body.table.fields.createdAt'),
+          sortable: true,
+          tdClass: 'align-middle text-truncate',
+        },
+        {
+          key: 'status',
+          label: this.$t('TodoList.card.body.table.fields.status'),
+          sortable: true,
+          tdClass: 'align-middle text-truncate',
+        },
+        {
+          key: 'actions',
+          label: this.$t('TodoList.card.body.table.fields.actions'),
+          sortable: false,
+          tdClass: 'align-middle',
+        },
       ]
+    },
+    rows() {
+      return this.items.length
     },
   },
   async mounted() {
@@ -137,7 +177,7 @@ export default {
     },
     // Crear tarea
     async createTask() {
-      const lengthTasks = this.tasks.length
+      const lengthTasks = this.items.length
       this.modalParams.id = lengthTasks + 1
       await this.$store.dispatch('Task.createTask', { self: this })
     },
