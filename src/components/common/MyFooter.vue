@@ -5,7 +5,7 @@
       <span>{{ $t('TodoList.footer.b') }} </span>
       <b-link target="_blank" href="https://github.com/alexchristianqr">@alexchristianqr </b-link>
       <span>{{ $t('TodoList.footer.c') }} </span>
-      <span class="text-danger" style="font-size: 18px">&hearts;</span>
+      <span class="text-danger">&hearts;</span>
     </div>
   </b-form-group>
 </template>
