@@ -27,7 +27,7 @@ export default {
     },
   },
   footer: {
-    a: 'Made with',
+    a: 'Made',
     b: 'by',
     c: 'with love',
   },

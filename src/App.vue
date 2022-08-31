@@ -28,7 +28,7 @@ export default {
     TodoList,
   },
   data: () => ({
-    country: { country: { id: 'PE', name: 'Perú', code: 'pe', flag: 'per.svg' } },
+    country: { country: { id: 'ES', name: 'España', code: 'es', flag: 'esp.svg' } },
   }),
 }
 </script>

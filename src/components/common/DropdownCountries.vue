@@ -53,7 +53,6 @@ export default {
   data: () => ({
     selected: null,
     dataCountries: [
-      { id: 'PE', name: 'Perú', code: 'pe', flag: 'per.svg' },
       { id: 'US', name: 'Estados Unidos', code: 'en', flag: 'usa.svg' },
       { id: 'ES', name: 'España', code: 'es', flag: 'esp.svg' },
     ],

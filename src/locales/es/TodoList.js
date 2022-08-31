@@ -27,7 +27,7 @@ export default {
     },
   },
   footer: {
-    a: 'Hecho con',
+    a: 'Hecho',
     b: 'por',
     c: 'con amor',
   },
